@@ -29,31 +29,30 @@ Before running this project locally, ensure you have the following installed:
 
 1. **Clone the repository**:
 
-   ```bash
-   git clone <repository-url>
-   cd <project-folder>
+         ```bash
+         git clone <repository-url>
+         cd <project-folder>
 
-   ```
 
-2. **Install dependencies**:
+2. **Install dependencies**
 
-   npm install
+          npm install 
 
-3. **Set environment variables**:
+5. **Set environment variables**:
 
 Create a .env file in the root directory and configure the following variables:
 
-    DB_USERNAME=<your-database-username>
-    DB_PASSWORD=<your-database-password>
-    DB_NAME=<your-database-name>
-    DB_CLUSTER=<your-database-cluster-url>
-    PORT=<port-number>
+          DB_USERNAME=<your-database-username>
+          DB_PASSWORD=<your-database-password>
+          DB_NAME=<your-database-name>
+          DB_CLUSTER=<your-database-cluster-url>
+          PORT=<port-number>
 
 4. **Set environment variables**:
 
-   npm start
+       npm index.js // npm start
 
-The application will start running on http://localhost:<port-number>.
+The application will start running on http://localhost:3000.
 
 ## Usage
 
