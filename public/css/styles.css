@@ -1,0 +1,27 @@
+/* Make sortable table headers indicate clickable */
+th.sortable {
+    cursor: pointer;
+}
+
+/* Default down arrow for sortable headers */
+th.sortable:after {
+    content: " ⯆";
+    font-size: 0.8em;
+    color: #007bff;
+}
+
+/* Up arrow for ascending sort order */
+th.sortable[data-order="asc"]:after {
+    content: " ⯅";
+}
+
+/* Custom container padding */
+.container-custom {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Ensure table is responsive */
+.table-responsive {
+    overflow-x: auto;
+}

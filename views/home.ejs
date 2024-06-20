@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>CSV Upload</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Fontawsome icons -->
+  <script src="https://kit.fontawesome.com/ae2ea5b617.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <!-- Heading for uploaded files -->
+    <h1 class="text-center mb-4">Uploaded Files</h1>
+    <!-- Table to display uploaded files -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% files.forEach(function(file) { %>
+          <tr>
+            <td>
+              <%= file.filename %>
+            </td>
+            <td class="d-flex align-items-center">
+              <!-- View button to navigate to details page -->
+              <a href="/csv/<%= file._id %>" class="btn btn-primary btn-sm mr-2">View</a>
+              <!-- Form for deleting the file -->
+              <form method="POST" action="/delete/<%= file._id %>"
+                onsubmit="return confirm('Are you sure you want to delete <%= file.filename %> file?');">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <!-- Heading for CSV upload section -->
+    <h2 class="text-center mt-5">CSV Upload</h2>
+    <!-- Form to upload a CSV file with front-end validation -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form id="uploadForm" class="mt-3" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="csvFile" class="form-label">Select a CSV file to upload:</label>
+            <input type="file" class="form-control" id="csvFile" name="csv" accept=".csv">
+          </div>
+          <button type="submit" class="btn btn-success">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery, Popper.js, Bootstrap JS (for responsive features and components) -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <!-- Front-end validation script with alert boxes -->
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const fileInput = document.getElementById('csvFile');
+
+      // Check if a file is selected
+      if (!fileInput.files || fileInput.files.length === 0) {
+        alert('Please select a CSV file.');
+        return false;
+      }
+
+      // Check file type
+      const validTypes = ['text/csv', 'application/vnd.ms-excel'];
+      if (!validTypes.includes(fileInput.files[0].type)) {
+        alert('Only CSV files are allowed.');
+        return false;
+      }
+
+      const formData = new FormData();
+      formData.append('csv', fileInput.files[0]);
+      formData.append('filename', fileInput.files[0].name); // Add filename to formData
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.text())
+        .then(data => {
+          if (data === 'A file with the same name already exists.') {
+            alert(data);
+          } else if (data === 'No files were uploaded.') {
+            alert(data);
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Internal server error');
+        });
+
+      return true;
+    });
+  </script>
+</body>
+
+</html>
