@@ -16,26 +16,32 @@ module.exports.upload = async function (req, res) {
     }
 
     const results = [];
-    fs.createReadStream(req.file.path)
-      .pipe(csv())
-      .on("data", (data) => results.push(data))
-      .on("end", async () => {
-        const newPath = path.join(
-          __dirname,
-          "../uploads",
-          req.file.originalname
-        );
-        fs.renameSync(req.file.path, newPath);
-
-        const csvData = new CSV({
-          filename: req.file.originalname,
-          header_row: results.length > 0 ? Object.keys(results[0]) : [],
-          data_rows: results,
-        });
-        await csvData.save();
-
-        return res.redirect("/");
+    // Process the file data from buffer
+    const bufferData = req.file.buffer.toString("utf8");
+    const rows = bufferData.trim().split("\n");
+    const header_row = rows[0].split(",");
+    const data_rows = rows.slice(1).map((row) => {
+      const row_data = {};
+      row.split(",").forEach((value, index) => {
+        row_data[header_row[index]] = value;
       });
+      return row_data;
+    });
+
+    // Save to database
+    const csvData = new CSV({
+      filename: req.file.originalname,
+      header_row: header_row,
+      data_rows: data_rows,
+    });
+    await csvData.save();
+
+    // Optionally save to disk
+    const uploadsPath = path.join(__dirname, "../uploads");
+    const newPath = path.join(uploadsPath, req.file.originalname);
+    fs.writeFileSync(newPath, bufferData, { encoding: "utf8" });
+
+    return res.redirect("/");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal server error");
