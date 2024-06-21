@@ -39,13 +39,13 @@ Before running this project locally, ensure you have the following installed:
 
 5. **Set environment variables**:
 
-Create a .env file in the root directory and configure the following variables:
+    Create a .env file in the root directory and configure the following variables:
 
-          DB_USERNAME=<your-database-username>
-          DB_PASSWORD=<your-database-password>
-          DB_NAME=<your-database-name>
-          DB_CLUSTER=<your-database-cluster-url>
-          PORT=<port-number>
+            DB_USERNAME=<your-database-username>
+            DB_PASSWORD=<your-database-password>
+            DB_NAME=<your-database-name>
+            DB_CLUSTER=<your-database-cluster-url>
+            PORT=<port-number>
 
 4. **Set environment variables**:
 
