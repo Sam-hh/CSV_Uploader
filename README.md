@@ -29,8 +29,8 @@ Before running this project locally, ensure you have the following installed:
 
 1. **Clone the repository**:
 
-         git clone <repository-url>
-         cd <project-folder>
+         git clone https://github.com/Sam-hh/CSV_Uploader.git
+         cd CSV_Uploader
 
 
 2. **Install dependencies**
